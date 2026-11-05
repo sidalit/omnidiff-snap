@@ -1,0 +1,62 @@
+name: omnidiff
+base: core26
+version: '0.3.0'
+title: OmniDiff
+icon: snap/gui/omnidiff.png
+summary: Compare code, pictures, archives, fonts and PDFs in your terminal
+description: |
+  OmniDiff compares source code structurally and understands pictures,
+  archives, fonts, cursors, translation catalogs and PDF documents.
+  Explore changes in its interactive terminal viewer, print a text diff,
+  or produce JSON for integrations.
+
+  This strictly confined snap includes Git for local repository review.
+  Files must be in accessible locations; host editors, Jujutsu and global
+  version-control configuration are not available inside the snap.
+license: AGPL-3.0-only
+grade: stable
+confinement: strict
+website: https://github.com/ivankovic/omnidiff
+source-code:
+  - https://github.com/ivankovic/omnidiff
+  - https://github.com/sidalit/omnidiff-snap
+issues:
+  - https://github.com/ivankovic/omnidiff/issues
+  - https://github.com/sidalit/omnidiff-snap/issues
+contact: https://github.com/sidalit/omnidiff-snap/issues
+
+platforms:
+  amd64:
+  arm64:
+
+apps:
+  omnidiff:
+    command: bin/omnidiff
+    plugs:
+      - home
+      - removable-media
+    environment:
+      PATH: $SNAP/bin:$SNAP/usr/bin:$PATH
+      GIT_EXEC_PATH: $SNAP/usr/lib/git-core
+      GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
+
+parts:
+  omnidiff:
+    plugin: rust
+    source: https://github.com/ivankovic/omnidiff.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source-depth: 1
+    rust-channel: stable
+    rust-cargo-parameters: [--bin, omnidiff]
+    build-packages:
+      - build-essential
+    stage-packages:
+      - git
+    override-build: |
+      craftctl default
+      install -Dm644 LICENSE THIRD-PARTY-NOTICES.md \
+        -t "$CRAFT_PART_INSTALL/usr/share/doc/omnidiff"
+      install -Dm644 src/tui/json_output.schema.json \
+        "$CRAFT_PART_INSTALL/usr/share/omnidiff/json_output.schema.json"
+      install -Dm644 "$CRAFT_PROJECT_DIR/snap/gui/omnidiff.png" \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/omnidiff.png"
