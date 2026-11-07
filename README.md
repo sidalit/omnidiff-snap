@@ -65,11 +65,6 @@ sudo snap install snapcraft --classic
 snapcraft pack
 ```
 
-```bash
-sudo snap install --dangerous ./omnidiff_*.snap
-omnidiff
-```
-
 ## Support
 
 - **Installation or snap issues:** [open a packaging issue](https://github.com/sidalit/omnidiff-snap/issues).
