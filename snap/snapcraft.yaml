@@ -38,7 +38,6 @@ apps:
     environment:
       PATH: $SNAP/bin:$SNAP/usr/bin:$PATH
       GIT_EXEC_PATH: $SNAP/usr/lib/git-core
-      GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
 
 parts:
   omnidiff:
@@ -50,8 +49,6 @@ parts:
     rust-cargo-parameters: [--bin, omnidiff]
     build-packages:
       - build-essential
-    stage-packages:
-      - git
     override-build: |
       craftctl default
       install -Dm644 LICENSE THIRD-PARTY-NOTICES.md \
@@ -60,3 +57,9 @@ parts:
         "$CRAFT_PART_INSTALL/usr/share/omnidiff/json_output.schema.json"
       install -Dm644 "$CRAFT_PROJECT_DIR/snap/gui/omnidiff.png" \
         "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/omnidiff.png"
+
+  git:
+    plugin: nil
+    build-attributes: [enable-patchelf]
+    stage-slices:
+      - git_bins
