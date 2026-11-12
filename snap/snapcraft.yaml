@@ -38,6 +38,8 @@ apps:
     environment:
       PATH: $SNAP/bin:$SNAP/usr/bin:$PATH
       GIT_EXEC_PATH: $SNAP/usr/lib/git-core
+      XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
+      XDG_STATE_HOME: $SNAP_USER_DATA/.local/state
 
 parts:
   omnidiff:
